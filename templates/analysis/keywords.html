@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% block title %}主题词分析 - 电商商品评论分析系统{% endblock %}
+{% block extra_css %}
+    <!-- 主题词分析页面样式 -->
+    <link rel="stylesheet" href="../../static/css/analysis/keywords.css">
+{% endblock %}
+{% block header_title %}<h2>主题词分析</h2>{% endblock %}
+{% block header_subtitle %}<p>对数据集进行关键词提取与主题分析</p>{% endblock %}
+{% block content %}
+    <div class="keywords-container">
+        <!-- 欢迎区域 -->
+        <div id="welcomeSection" class="welcome-section">
+            <div class="welcome-icon-box">
+                <i class="fas fa-font"></i>
+            </div>
+            <h1>主题词分析系统</h1>
+            <p class="description">
+                主题词分析是通过自然语言处理技术，从评论文本中提取关键词汇、分析词频分布、<br>
+                挖掘热点话题和主题聚类的智能分析工具。帮助您快速洞察用户关注的核心内容。
+            </p>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar" id="mainToolbar">
+            <!-- 数据集选择 -->
+            <div class="select-wrapper">
+                <select id="datasetSelect">
+                    <option value="">--- 请选择数据集 ---</option>
+                    {% for ds in datasets %}
+                        <option value="{{ ds.dataset }}">{{ ds.dataset }}</option>
+                    {% endfor %}
+                </select>
+                <div id="customSelectOptions" class="custom-select-options"></div>
+            </div>
+            <!-- 算法设置 -->
+            <div class="algorithm-settings">
+                <div class="lda-params">
+                    <!-- 主题数量参数 -->
+                    <div class="param-item">
+                        <div class="param-input-container">
+                            <span class="param-text">主题数量：</span>
+                            <input type="number" id="numTopics" value="8" min="2" max="10" title="主题数量">
+                        </div>
+                    </div>
+                    <!-- 关键词数量参数 -->
+                    <div class="param-item">
+                        <div class="param-input-container">
+                            <span class="param-text">关键词数量：</span>
+                            <input type="number" id="topN" value="50" min="10" max="200" title="每个主题提取关键词数量">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 开始分析按钮 -->
+            <button id="analyzeBtn" class="btn-primary">
+                <i class="fas fa-wand-magic-sparkles"></i> 开始分析
+            </button>
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>正在进行主题词提取与分析，请稍候...</p>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="errorMessage" class="error-message hidden">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- 结果展示区域 -->
+        <div id="resultsArea" class="hidden">
+            <!-- 统计指标卡片 -->
+            <div class="metrics-grid">
+                <!-- 总评论数 -->
+                <div class="metric-card">
+                    <h3><i class="fas fa-file-alt"></i> 总评论数</h3>
+                    <p class="value" id="totalComments">--</p>
+                </div>
+                <!-- 提取词数 -->
+                <div class="metric-card">
+                    <h3><i class="fas fa-font"></i> 提取词数</h3>
+                    <p class="value" id="totalKeywords">--</p>
+                </div>
+                <!-- 最热关键词 -->
+                <div class="metric-card">
+                    <h3><i class="fas fa-fire"></i> 最热关键词</h3>
+                    <p class="value sub" id="topKeyword">--</p>
+                </div>
+                <!-- 平均词频 -->
+                <div class="metric-card">
+                    <h3><i class="fas fa-chart-line"></i> 平均词频</h3>
+                    <p class="value sub" id="avgFreq">--</p>
+                </div>
+            </div>
+
+            <!-- 图表区域 -->
+            <div class="charts-container">
+                <!-- 主题分布饼图 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-chart-pie"></i> 主题分布</h4>
+                    </div>
+                    <div class="chart-content">
+                        <canvas id="topicDistributionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 主题关联网络图 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-project-diagram"></i> 主题关联网络</h4>
+                    </div>
+                    <div class="chart-content">
+                        <div id="topicNetworkChart"></div>
+                    </div>
+                </div>
+
+                <!-- 主题词云图 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-cloud"></i> 主题词云图</h4>
+                        <div class="chart-actions">
+                            <select id="topicSelect" class="topic-select">
+                                <option value="all">全部主题</option>
+                            </select>
+                            <button class="btn-icon" id="refreshWordCloud" title="刷新">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        <div id="wordCloud"></div>
+                    </div>
+                </div>
+
+                <!-- 主题-关键词热力图 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-th"></i> 主题-关键词关系</h4>
+                    </div>
+                    <div class="chart-content">
+                        <div id="topicKeywordHeatmap"></div>
+                    </div>
+                </div>
+
+                <!-- 关键词趋势折线图 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-chart-line"></i> 主题趋势</h4>
+                    </div>
+                    <div class="chart-content">
+                        <canvas id="topicTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 关键词影响力评估图 -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-chart-bar"></i> 关键词影响力</h4>
+                    </div>
+                    <div class="chart-content">
+                        <canvas id="keywordInfluenceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商业洞察分析 -->
+            <div class="insights-section">
+                <div class="section-header">
+                    <h4><i class="fas fa-lightbulb"></i> 商业洞察</h4>
+                    <div class="section-actions">
+                        <button class="btn-secondary" id="generateInsightsBtn">
+                            <i class="fas fa-sync-alt"></i> 生成洞察
+                        </button>
+                    </div>
+                </div>
+                <div class="insights-content">
+                    <!-- 洞察加载状态 -->
+                    <div id="insightsLoader" class="hidden">
+                        <div class="loader"></div>
+                        <p>正在分析数据...</p>
+                    </div>
+                    <!-- 洞察结果 -->
+                    <div id="insightsResults">
+                        <div class="insights-grid">
+                            <!-- 主题分布分析 -->
+                            <div class="insight-card">
+                                <div class="insight-header">
+                                    <h5>主题分布分析</h5>
+                                    <span class="insight-icon"><i class="fas fa-chart-pie"></i></span>
+                                </div>
+                                <div class="insight-body">
+                                    <p id="topicDistributionInsight">请点击生成洞察按钮</p>
+                                </div>
+                            </div>
+                            <!-- 核心关键词分析 -->
+                            <div class="insight-card">
+                                <div class="insight-header">
+                                    <h5>核心关键词分析</h5>
+                                    <span class="insight-icon"><i class="fas fa-star"></i></span>
+                                </div>
+                                <div class="insight-body">
+                                    <p id="coreKeywordsInsight">请点击生成洞察按钮</p>
+                                </div>
+                            </div>
+                            <!-- 主题关联分析 -->
+                            <div class="insight-card">
+                                <div class="insight-header">
+                                    <h5>主题关联分析</h5>
+                                    <span class="insight-icon"><i class="fas fa-project-diagram"></i></span>
+                                </div>
+                                <div class="insight-body">
+                                    <p id="topicRelationInsight">请点击生成洞察按钮</p>
+                                </div>
+                            </div>
+                            <!-- 商业建议 -->
+                            <div class="insight-card">
+                                <div class="insight-header">
+                                    <h5>商业建议</h5>
+                                    <span class="insight-icon"><i class="fas fa-bullseye"></i></span>
+                                </div>
+                                <div class="insight-body">
+                                    <p id="businessSuggestions">请点击生成洞察按钮</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 关键词详情表格 -->
+            <div class="keywords-table-section">
+                <div class="section-header">
+                    <h4><i class="fas fa-table"></i> 关键词详情</h4>
+                    <div class="section-actions">
+                        <!-- 搜索框 -->
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="keywordSearch" placeholder="搜索关键词...">
+                        </div>
+                        <!-- 词性筛选 -->
+                        <div class="filter-box">
+                            <select id="posFilter" class="topic-select">
+                                <option value="all">所有词性</option>
+                                <option value="名词">名词</option>
+                                <option value="动词">动词</option>
+                                <option value="形容词">形容词</option>
+                                <option value="副词">副词</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <!-- 导出按钮 -->
+                        <button class="btn-secondary" id="exportBtn">
+                            <i class="fas fa-download"></i> 导出结果
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="keywordsTable">
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>关键词</th>
+                                <th>词频</th>
+                                <th>权重/得分</th>
+                                <th>词性</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody id="keywordsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 分页控件 -->
+                <div class="pagination" id="tablePagination">
+                    <button class="btn-page" id="prevPage"><i class="fas fa-chevron-left"></i></button>
+                    <span id="pageInfo">第 1 页</span>
+                    <button class="btn-page" id="nextPage"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <!-- 主题详情模态框 -->
+            <div id="topicModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="modalTitle">主题详情</h5>
+                        <button id="closeModal" class="btn-icon">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="topic-info">
+                            <div class="topic-stats">
+                                <!-- 主题权重 -->
+                                <div class="stat-item">
+                                    <span class="stat-label">主题权重</span>
+                                    <span id="topicWeight" class="stat-value">--</span>
+                                </div>
+                                <!-- 关键词数量 -->
+                                <div class="stat-item">
+                                    <span class="stat-label">关键词数量</span>
+                                    <span id="topicKeywordCount" class="stat-value">--</span>
+                                </div>
+                            </div>
+                            <!-- 核心关键词 -->
+                            <div class="topic-keywords">
+                                <h6>核心关键词</h6>
+                                <div id="topicKeywordsList" class="keywords-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closeModalBtn" class="btn-secondary">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ECharts 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <!-- ECharts 词云插件 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
+    <!-- 主题词分析页面JavaScript -->
+    <script src="../../static/js/analysis/keywords.js"></script>
+{% endblock %}

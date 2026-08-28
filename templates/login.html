@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- 文档基本信息 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面标题 -->
+    <title>电商商品评论分析系统</title>
+    <!-- 网站图标 -->
+    <link rel="icon" href="../static/images/logo.png" type="image/png" sizes="any">
+    <!-- 登录页面样式 -->
+    <link rel="stylesheet" href="../static/css/login.css">
+    <!-- 登录页面JavaScript -->
+    <script src="../static/js/login.js"></script>
+</head>
+<body>
+<!-- 主容器 -->
+<div class="main">
+    <!-- 系统标题 -->
+    <h1 style="font-weight: bold;">电商商品评论分析系统</h1>
+    <!-- 登录表单容器 -->
+    <div class="login-form">
+        <!-- 标签容器 -->
+        <div class="tabs-container">
+            <!-- 标签导航 -->
+            <div class="tabs-nav">
+                <div class="tab-btn active" data-tab="login">登录</div>
+                <div class="tab-btn" data-tab="register">注册</div>
+            </div>
+
+            <!-- 标签内容 -->
+            <div class="tabs-content">
+                <!-- 登录表单 -->
+                <div class="tab-content active" id="login">
+                    <form class="login-form-content">
+                        {% csrf_token %}
+                        <!-- 用户名输入 -->
+                        <div class="form-group">
+                            <label for="username">用户名</label>
+                            <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+                        </div>
+                        <!-- 密码输入 -->
+                        <div class="form-group">
+                            <label for="password">密码</label>
+                            <input type="password" id="password" name="password" placeholder="请输入密码" required>
+                        </div>
+                        <!-- 记住我选项 -->
+                        <div class="form-group remember">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">记住我？</label>
+                        </div>
+                        <!-- 登录按钮 -->
+                        <button type="submit" class="submit-btn">登录</button>
+                        <!-- 表单底部 -->
+                        <div class="form-footer">
+                            <a href="#" class="forgot-password">忘记密码？请联系工作人员</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 注册表单 -->
+                <div class="tab-content" id="register">
+                    <form class="register-form-content">
+                        {% csrf_token %}
+                        <!-- 用户名输入 -->
+                        <div class="form-group">
+                            <label for="reg-username">用户名</label>
+                            <input type="text" id="reg-username" name="username" placeholder="请输入用户名"
+                                   required>
+                        </div>
+                        <!-- 手机号输入 -->
+                        <div class="form-group">
+                            <label for="phone">手机号</label>
+                            <input type="tel" id="phone" name="phone" placeholder="请输入手机号"
+                                   pattern="[0-9]{11}" required>
+                        </div>
+                        <!-- 邮箱输入 -->
+                        <div class="form-group">
+                            <label for="email">邮箱</label>
+                            <input type="email" id="email" name="email" placeholder="请输入邮箱地址" required>
+                        </div>
+                        <!-- 密码输入 -->
+                        <div class="form-group">
+                            <label for="reg-password">密码</label>
+                            <input type="password" id="reg-password" name="password" placeholder="请输入密码"
+                                   required>
+                        </div>
+                        <!-- 同意协议选项 -->
+                        <div class="form-group agree">
+                            <input type="checkbox" id="agree">
+                            <label for="agree">我已阅读并同意服务协议和隐私政策</label>
+                        </div>
+                        <!-- 注册按钮 -->
+                        <button type="submit" class="submit-btn">注册</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 版权信息 -->
+<div class="copyright">
+    <p>版权所有：设计者 马璐玮</p>
+</div>
+</body>
+</html>

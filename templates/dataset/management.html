@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}数据管理 - 电商商品评论分析系统{% endblock %}
+{% block extra_css %}
+    <!-- 数据管理页面样式 -->
+    <link rel="stylesheet" href="../../static/css/dataset/management.css">
+{% endblock %}
+{% block header_title %}<h2>数据管理</h2>{% endblock %}
+{% block header_subtitle %}<p>查看、修改和删除数据集信息</p>{% endblock %}
+{% block content %}
+    <div class="management-container">
+        <!-- 操作按钮区域 -->
+        <div class="action-bar">
+            <!-- 创建数据集按钮 -->
+            <button id="createBtn" class="btn btn-primary">
+                <i class="fas fa-plus"></i> 创建数据集
+            </button>
+            <!-- 刷新列表按钮 -->
+            <button id="refreshBtn" class="btn btn-secondary">
+                <i class="fas fa-sync-alt"></i> 刷新列表
+            </button>
+            <!-- 搜索框 -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索数据集或商品名称...">
+                <button id="searchBtn" class="btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 数据集列表 -->
+        <div class="datasets-table-container">
+            <table class="datasets-table">
+                <thead>
+                <tr>
+                    <th>数据集名称</th>
+                    <th>商品名称</th>
+                    <th>创建时间</th>
+                    <th>数据来源</th>
+                    <th>评论数量</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="datasetsBody">
+                <!-- 数据集数据将通过JavaScript动态加载 -->
+                <tr id="loadingRow">
+                    <td colspan="6" class="loading-cell">
+                        <div class="loading-spinner"></div>
+                        <span>正在加载数据集...</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 无数据提示 -->
+            <div id="noDataMessage" class="no-data-message" style="display: none;">
+                <i class="fas fa-database"></i>
+                <p>暂无数据集</p>
+                <p>点击"创建数据集"按钮开始创建您的第一个数据集</p>
+            </div>
+        </div>
+
+        <!-- 分页控件 -->
+        <div class="pagination" id="pagination" style="display: none;">
+            <button id="prevBtn" class="page-btn">
+                <i class="fas fa-chevron-left"></i> 上一页
+            </button>
+            <h4 style="Font-weight: normal">
+                <span id="pageInfo">第 1 页 / 共 1 页</span>
+            </h4>
+            <button id="nextBtn" class="page-btn">
+                下一页 <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 修改数据集模态框 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>修改数据集</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    <!-- 数据集名称输入 -->
+                    <div class="form-group">
+                        <label for="editDataset">数据集名称 *</label>
+                        <input type="text" id="editDataset" required>
+                        <div class="error-message" id="datasetError"></div>
+                    </div>
+                    <!-- 商品名称输入 -->
+                    <div class="form-group">
+                        <label for="editProduct">商品名称 *</label>
+                        <input type="text" id="editProduct" required>
+                        <div class="error-message" id="productError"></div>
+                    </div>
+                    <!-- 数据来源（只读） -->
+                    <div class="form-group">
+                        <label>数据来源</label>
+                        <input type="text" id="editDatasource" disabled>
+                    </div>
+                    <!-- 创建时间（只读） -->
+                    <div class="form-group">
+                        <label>创建时间</label>
+                        <input type="text" id="editCreationtime" disabled>
+                    </div>
+                    <!-- 评论数量（只读） -->
+                    <div class="form-group">
+                        <label>评论数量</label>
+                        <input type="text" id="editCommentsCount" disabled>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary cancel-btn">取消</button>
+                <button type="button" class="btn btn-primary save-btn">保存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认模态框 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content delete-modal">
+            <div class="modal-header">
+                <h3>确认删除</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p id="deleteMessage">您确定要删除这个数据集吗？</p>
+                    <p class="warning-text">此操作将删除该数据集及其所有评论数据，且无法恢复！</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary cancel-btn">取消</button>
+                <button type="button" class="btn btn-danger confirm-delete-btn">确认删除</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <!-- 数据管理页面JavaScript -->
+    <script src="../../static/js/dataset/management.js"></script>
+{% endblock %}

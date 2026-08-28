@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title %}评论管理 - 电商商品评论分析系统{% endblock %}
+{% block extra_css %}
+    <!-- 评论管理页面样式 -->
+    <link rel="stylesheet" href="../static/css/search.css">
+{% endblock %}
+{% block header_title %}<h2>评论管理</h2>{% endblock %}
+{% block header_subtitle %}<p>搜索和分析商品评论</p>{% endblock %}
+{% block content %}
+    <div class="content-area">
+        <div class="page-container">
+            <!-- 搜索和筛选区域 -->
+            <div class="search-section">
+                <!-- 搜索栏 -->
+                <div class="search-bar-large">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchKeyword" placeholder="输入关键词搜索评论内容...">
+                    <button class="search-btn" id="searchBtn">
+                        <i class="fas fa-search"></i> 搜索
+                    </button>
+                </div>
+
+                <!-- 筛选和排序区域 -->
+                <div class="filter-sort-area">
+                    <!-- 筛选条件行 -->
+                    <div class="filter-group">
+                        <label><i class="fas fa-filter"></i> 筛选：</label>
+                        <!-- 数据集筛选 -->
+                        <select id="datasetFilter">
+                            <option value="">所有数据集</option>
+                            {% for dataset in datasets %}
+                                <option value="{{ dataset }}">{{ dataset|truncatechars:20 }}</option>
+                            {% endfor %}
+                        </select>
+                        <!-- 商品筛选 -->
+                        <select id="productFilter">
+                            <option value="">所有商品</option>
+                            {% for product in products %}
+                                <option value="{{ product }}">{{ product|truncatechars:20 }}</option>
+                            {% endfor %}
+                        </select>
+                        <!-- 数据来源筛选 -->
+                        <select id="datasourceFilter">
+                            <option value="">所有平台</option>
+                            {% for source in datasources %}
+                                <option value="{{ source }}">{{ source }}</option>
+                            {% endfor %}
+                        </select>
+                        <!-- 情感筛选 -->
+                        <select id="sentimentFilter">
+                            <option value="all" selected>所有情感</option>
+                            <option value="positive">好评</option>
+                            <option value="neutral">中评</option>
+                            <option value="negative">差评</option>
+                        </select>
+                        <!-- 重置按钮 -->
+                        <button class="reset-btn" id="resetBtn">
+                            <i class="fas fa-redo"></i> 重置
+                        </button>
+                    </div>
+
+                    <!-- 排序方式行 -->
+                    <div class="sort-group">
+                        <label><i class="fas fa-sort"></i> 排序：</label>
+                        <!-- 排序依据 -->
+                        <select id="sortBy">
+                            <option value="publishtime" selected>发布时间</option>
+                            <option value="score">评分</option>
+                        </select>
+                        <!-- 排序顺序 -->
+                        <select id="sortOrder">
+                            <option value="desc" selected>最新发布</option>
+                            <option value="asc">最久发布</option>
+                        </select>
+                        <!-- 导出按钮 -->
+                        <button class="export-all-btn" id="exportAllBtn">
+                            <i class="fas fa-download"></i> 导出
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 结果展示区域 -->
+            <div class="results-section">
+                <!-- 结果头部 -->
+                <div class="section-header">
+                    <h3>搜索结果</h3>
+                    <span class="result-count" id="resultCount">正在加载...</span>
+                </div>
+
+                <!-- 评论列表容器 -->
+                <div class="comment-list" id="commentList">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i> 正在加载评论...
+                    </div>
+                </div>
+
+                <!-- 滚动加载提示 -->
+                <div class="load-more-section" id="loadMoreSection">
+                    <div class="load-more-text" id="loadMoreSpinner" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> 正在加载更多评论...
+                    </div>
+                    <div class="no-more-results" id="noMoreResults" style="display: none;">
+                        <i class="fas fa-check-circle"></i> 已加载所有评论
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 评论模板 -->
+    <template id="commentTemplate">
+        <div class="comment-item">
+            <div class="comment-header">
+                <!-- 用户信息 -->
+                <span class="comment-user-info">
+                    <i class="fas fa-user"></i>
+                    <strong class="comment-nickname"></strong>
+                </span>
+                <!-- 数据来源标签 -->
+                <span class="comment-datasource-tag">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="comment-datasource"></span>
+                </span>
+                <!-- 商品信息 -->
+                <span class="comment-product-info">
+                    商品：<span class="product-name"></span>
+                </span>
+                <!-- 数据集信息 -->
+                <span class="comment-dataset-info">
+                    数据集：<span class="dataset-name"></span>
+                </span>
+                <!-- 评论日期 -->
+                <span class="comment-date"></span>
+                <!-- 评分 -->
+                <span class="comment-score">
+                    <i class="fas fa-star"></i>
+                    <span class="score-value"></span>
+                </span>
+                <!-- 情感标签 -->
+                <span class="comment-sentiment sentiment-none">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="sentiment-text"></span>
+                </span>
+            </div>
+            <!-- 评论内容 -->
+            <div class="comment-content"></div>
+        </div>
+    </template>
+{% endblock %}
+{% block extra_js %}
+    <!-- 评论管理页面JavaScript -->
+    <script src="../static/js/search.js"></script>
+{% endblock %}

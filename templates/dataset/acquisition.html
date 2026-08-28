@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% block title %}数据采集 - 电商商品评论分析系统{% endblock %}
+{% block extra_css %}
+    <!-- 数据采集页面样式 -->
+    <link rel="stylesheet" href="../../static/css/dataset/acquisition.css">
+{% endblock %}
+{% block header_title %}<h2>数据采集</h2>{% endblock %}
+{% block header_subtitle %}<p>获取电商商品评论数据</p>{% endblock %}
+{% block content %}
+<div class="acquisition-container">
+    <!-- 数据获取配置表单 -->
+    <div class="acquisition-card">
+        <div class="card-header">
+            <h3><i class="fas fa-cloud-download-alt"></i> 数据获取配置</h3>
+        </div>
+        <div class="card-body">
+            <form id="acquisitionForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- 数据来源选择 -->
+                <div class="form-group">
+                    <label for="datasource">
+                        <i class="fas fa-shopping-cart"></i> 数据来源
+                    </label>
+                    <div class="platform-options">
+                        <!-- 京东选项 -->
+                        <div class="platform-option" data-value="京东">
+                            <div class="platform-icon">
+                                <img src="../../static/images/e-commerce/jd.jpg" alt="京东">
+                            </div>
+                            <span>京东</span>
+                        </div>
+                        <!-- 淘宝选项 -->
+                        <div class="platform-option" data-value="淘宝">
+                            <div class="platform-icon">
+                                <img src="../../static/images/e-commerce/taobao.jpg" alt="淘宝">
+                            </div>
+                            <span>淘宝</span>
+                        </div>
+                        <!-- 拼多多选项 -->
+                        <div class="platform-option" data-value="拼多多">
+                            <div class="platform-icon">
+                                <img src="../../static/images/e-commerce/pdd.jpg" alt="拼多多">
+                            </div>
+                            <span>拼多多</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="datasource" name="datasource" required>
+                </div>
+
+                <!-- 数据集名称输入 -->
+                <div class="form-group">
+                    <label for="dataset">
+                        <i class="fas fa-folder"></i> 数据集名称
+                    </label>
+                    <input type="text" id="dataset" name="dataset"
+                           placeholder="请输入数据集名称，如：小米手机评论" required>
+                </div>
+
+                <!-- 商品名称输入 -->
+                <div class="form-group">
+                    <label for="product">
+                        <i class="fas fa-box"></i> 商品名称
+                    </label>
+                    <input type="text" id="product" name="product"
+                           placeholder="请输入商品名称，如：小米15 Ultra" required>
+                </div>
+
+                <!-- 商品网站输入 -->
+                <div class="form-group">
+                    <label for="productUrl">
+                        <i class="fas fa-barcode"></i> 商品网站
+                    </label>
+                    <input type="text" id="productUrl" name="productUrl"
+                           placeholder="请输入商品网站，如：https://item.jd.com/10155687151208.html（京东）" required>
+                </div>
+
+                <!-- 最大获取页数输入 -->
+                <div class="form-group">
+                    <label for="maxPages">
+                        <i class="fas fa-layer-group"></i> 最大获取页数
+                    </label>
+                    <input type="number" id="maxPages" name="maxPages"
+                           value="50" min="1" max="100">
+                    <small class="form-text">最多可获取100页</small>
+                </div>
+
+                <!-- 表单操作按钮 -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="startBtn">
+                        <i class="fas fa-play-circle"></i> 开始获取
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="resetBtn">
+                        <i class="fas fa-redo"></i> 重置
+                    </button>
+                    <small class="btn-text">需要等待一段时间，在此期间请勿关闭页面</small>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 数据获取进度显示 -->
+    <div class="progress-card" id="progressCard" style="display: none;">
+        <div class="card-header">
+            <h3><i class="fas fa-history fa-lg"></i> 数据获取进度</h3>
+        </div>
+        <div class="card-body">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0"></div>
+                </div>
+                <div class="progress-text" id="progressText">准备中...</div>
+            </div>
+
+            <!-- 结果摘要 -->
+            <div class="result-summary" id="resultSummary" style="display: none;">
+                <div class="alert alert-success">
+                    <h4><i class="fas fa-check-circle"></i> 数据获取完成！</h4>
+                    <div class="result-details">
+                        <!-- 评论数量 -->
+                        <div class="result-item">
+                            <i class="fas fa-comment"></i>
+                            <span>本次共获取 <strong id="totalComments">0</strong> 条评论</span>
+                        </div>
+                        <!-- 耗时 -->
+                        <div class="result-item">
+                            <i class="fas fa-clock"></i>
+                            <span>耗时 <strong id="timeSpent">0</strong> 秒</span>
+                        </div>
+                    </div>
+                    <!-- 结果操作按钮 -->
+                    <div class="result-actions">
+                        <button type="button" class="btn btn-success" id="viewDataBtn">
+                            <i class="fas fa-eye"></i> 查看数据集
+                        </button>
+                        <button type="button" class="btn btn-outline-success" id="newAcquisitionBtn">
+                            <i class="fas fa-plus"></i> 开始新的获取
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 帮助信息 -->
+    <div class="help-card">
+        <div class="card-header">
+            <h3><i class="fas fa-question-circle"></i> 使用说明</h3>
+        </div>
+        <div class="card-body">
+            <div class="help-content">
+                <!-- 商品网站查询说明 -->
+                <h4><i class="fas fa-lightbulb"></i> 商品网站查询？</h4>
+                <ul>
+                    <li><strong>京东：</strong>商品详情页 https://item.jd.com/商品id.html?...</li>
+                    <li><strong>淘宝：</strong>商品详情页 https://detail.tmall.com/item.htm?或https://detail.taobao.com/item.htm?...</li>
+                    <li><strong>拼多多：</strong>商品详情页 https://mobile.pinduoduo.com/goods.html?...</li>
+                </ul>
+
+                <!-- 注意事项 -->
+                <h4><i class="fas fa-exclamation-triangle"></i> 注意事项</h4>
+                <ul>
+                    <li>遇到获取数据需要登录时，请先登录并重新操作</li>
+                    <li>请确保数据获取过程中网络连接正常</li>
+                    <li>数据获取过程中请勿刷新或关闭页面</li>
+                    <li>单个数据集建议设置合理的获取页数</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+    <!-- 数据采集页面JavaScript -->
+    <script src="../../static/js/dataset/acquisition.js"></script>
+{% endblock %}

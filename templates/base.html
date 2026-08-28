@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- 文档基本信息 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面标题，可被子模板覆盖 -->
+    <title>{% block title %}电商商品评论分析系统{% endblock %}</title>
+    <!-- 网站图标 -->
+    <link rel="icon" href="../static/images/logo.png" type="image/png" sizes="any">
+    <!-- 基础样式 -->
+    <link rel="stylesheet" href="../static/css/base.css">
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 子模板自定义样式 -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<!-- 主容器 -->
+<div class="container">
+    <!-- 侧边栏导航 -->
+    <aside class="sidebar">
+        <!-- 系统logo -->
+        <div class="logo">
+            <h1><i class="fas fa-chart-line"></i> 评论分析系统</h1>
+        </div>
+        <!-- 主导航菜单 -->
+        <nav class="main-nav">
+            <div class="nav-section">
+                <h3>菜单</h3>
+                <ul>
+                    <!-- 数据总览 -->
+                    <li {% if request.path == '/dashboard/' %}class="active"{% endif %}>
+                        <a href="/dashboard/"><i class="fas fa-tachometer-alt"></i> 数据总览</a>
+                    </li>
+                    <!-- 数据集管理子菜单 -->
+                    <li class="has-submenu {% if '/acquisition/' in request.path or '/management/' in request.path %}expanded{% endif %}">
+                        <a href="#"><i class="fas fa-database"></i> 数据集</a>
+                        <ul class="submenu">
+                            <!-- 数据采集 -->
+                            <li {% if request.path == '/acquisition/' %}class="active"{% endif %}>
+                                <a href="/acquisition/"><i class="fas fa-cloud-download-alt"></i> 数据采集</a>
+                            </li>
+                            <!-- 数据管理 -->
+                            <li {% if request.path == '/management/' %}class="active"{% endif %}>
+                                <a href="/management/"><i class="fas fa-table"></i> 数据管理</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 评论管理 -->
+                    <li {% if request.path == '/search/' %}class="active"{% endif %}>
+                        <a href="/search/"><i class="fas fa-search"></i> 评论管理</a>
+                    </li>
+                    <!-- 情感分析 -->
+                    <li {% if request.path == '/emotion/' %}class="active"{% endif %}>
+                        <a href="/emotion/"><i class="fas fa-smile"></i> 情感分析</a>
+                    </li>
+                    <!-- 主题词分析 -->
+                    <li {% if request.path == '/keywords/' %}class="active"{% endif %}>
+                        <a href="/keywords/"><i class="fas fa-font"></i> 主题词分析</a>
+                    </li>
+                    <!-- 多平台竞品分析 -->
+                    <li {% if request.path == '/competing/' %}class="active"{% endif %}>
+                        <a href="/competing/"><i class="fas fa-chart-bar"></i> 多平台竞品分析</a>
+                    </li>
+                    <!-- 系统设置 -->
+                    <li {% if request.path == '/setting/' %}class="active"{% endif %}>
+                        <a href="/setting/"><i class="fas fa-tools"></i> 设置</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- 侧边栏底部用户信息 -->
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <!-- 用户头像 -->
+                <div class="avatar">
+                    <img src="{{ user.avatar_url }}" alt="头像"
+                         style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                </div>
+                <!-- 用户信息 -->
+                <div class="user-info">
+                    <h4>{{ user.nickname }}</h4>
+                    <p>数据分析师</p>
+                </div>
+                <!-- 登出按钮 -->
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> 退出登录
+                </button>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 页面头部 -->
+        <header class="top-header">
+            <div class="header-left">
+                <!-- 页面标题，由子模板定义 -->
+                {% block header_title %}{% endblock %}
+                <!-- 页面副标题，由子模板定义 -->
+                {% block header_subtitle %}{% endblock %}
+            </div>
+        </header>
+        
+        <!-- 页面内容，由子模板定义 -->
+        {% block content %}{% endblock %}
+        
+        <!-- 页脚 -->
+        <footer class="main-footer">
+            <p>版权所有：设计者 马璐玮 2026 | E-DAP 电商商品评论分析系统</p>
+        </footer>
+    </main>
+</div>
+
+<!-- 基础JavaScript -->
+<script src="../static/js/base.js"></script>
+<!-- 子模板自定义JavaScript -->
+{% block extra_js %}{% endblock %}
+</body>
+</html>

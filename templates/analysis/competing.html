@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block title %}多平台竞品分析 - 电商商品评论分析系统{% endblock %}
+{% block extra_css %}
+    <!-- 多平台竞品分析页面样式 -->
+    <link rel="stylesheet" href="../../static/css/analysis/competing.css">
+{% endblock %}
+{% block header_title %}<h2>多平台竞品分析</h2>{% endblock %}
+{% block header_subtitle %}<p>对数据集进行竞品对比多平台分析</p>{% endblock %}
+{% block content %}
+    <div class="competing-container">
+        <!-- 欢迎区域 -->
+        <div id="welcomeSection" class="welcome-section">
+            <div class="welcome-icon-box">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h1>多平台竞品分析系统</h1>
+            <p class="description">
+                多平台竞品分析是对不同平台的商品评论进行对比分析，帮助您了解商品在不同平台的表现，
+                以及与竞品的对比情况，为产品优化提供数据支持。
+            </p>
+        </div>
+
+        <!-- 数据选择区域 -->
+        <div class="toolbar" id="mainToolbar">
+            <!-- 分析类型切换 -->
+            <div class="analysis-type-switch">
+                <button id="platformAnalysisBtn" class="btn-primary active">多平台分析</button>
+                <button id="competitiveAnalysisBtn" class="btn-secondary">竞品分析</button>
+            </div>
+            <!-- 多平台分析数据选择 -->
+            <div id="platformAnalysisSection">
+                <label for="productSelect">选择商品：</label>
+                <div class="select-wrapper">
+                    <select id="productSelect">
+                        <option value="">--- 请选择商品 ---</option>
+                        {% for product in products %}
+                            <option value="{{ product }}">{{ product }}</option>
+                        {% endfor %}
+                    </select>
+                    <div id="customSelectOptions" class="custom-select-options"></div>
+                </div>
+            </div>
+
+            <!-- 竞品分析数据选择 -->
+            <div id="competitiveAnalysisSection" class="hidden">
+                <div class="datasets-selector">
+                    <label>选择数据集：</label>
+                    <div class="dataset-selectors">
+                        <!-- 数据集选择1 -->
+                        <div class="select-wrapper">
+                            <select class="dataset-select" id="datasetSelect1">
+                                <option value="">--- 选择数据集 ---</option>
+                                {% for dataset in datasets %}
+                                    <option value="{{ dataset.dataset }}">{{ dataset.dataset }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="custom-select-options" id="customSelectOptions1"></div>
+                        </div>
+                        <!-- 数据集选择2 -->
+                        <div class="select-wrapper">
+                            <select class="dataset-select" id="datasetSelect2">
+                                <option value="">--- 选择数据集 ---</option>
+                                {% for dataset in datasets %}
+                                    <option value="{{ dataset.dataset }}">{{ dataset.dataset }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="custom-select-options" id="customSelectOptions2"></div>
+                        </div>
+                        <!-- 数据集选择3 -->
+                        <div class="select-wrapper">
+                            <select class="dataset-select" id="datasetSelect3">
+                                <option value="">--- 选择数据集 ---</option>
+                                {% for dataset in datasets %}
+                                    <option value="{{ dataset.dataset }}">{{ dataset.dataset }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="custom-select-options" id="customSelectOptions3"></div>
+                        </div>
+                        <!-- 数据集选择4 -->
+                        <div class="select-wrapper">
+                            <select class="dataset-select" id="datasetSelect4">
+                                <option value="">--- 选择数据集 ---</option>
+                                {% for dataset in datasets %}
+                                    <option value="{{ dataset.dataset }}">{{ dataset.dataset }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="custom-select-options" id="customSelectOptions4"></div>
+                        </div>
+                    </div>
+                    <!-- 选择状态 -->
+                    <div class="selection-status">
+                        <span id="selectedCount">已选择 0 个数据集</span>
+                        （最少2个，最多4个），注意：第一个数据集为基准数据集，其他数据集为对比数据集。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 开始分析按钮 -->
+            <button id="analyzeBtn" class="btn-primary">
+                <i class="fas fa-wand-magic-sparkles"></i> 开始分析
+            </button>
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>正在分析数据，请稍候...</p>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="errorMessage" class="error-message hidden">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- 结果展示区域 -->
+        <div id="resultsArea" class="hidden">
+            <!-- 多平台分析结果 -->
+            <div id="platformResults" class="hidden">
+                <h3>多平台分析结果</h3>
+                <!-- 指标网格 -->
+                <div class="metrics-grid" id="platformMetricsContainer"></div>
+                <!-- 图表容器 -->
+                <div class="charts-container">
+                    <!-- 近12个月多平台好评数波动 -->
+                    <div class="chart-box">
+                        <h4>近12个月多平台好评数波动</h4>
+                        <div class="chart-content">
+                            <canvas id="platformGoodRateChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- 各平台评论数量对比 -->
+                    <div class="chart-box">
+                        <h4>各平台评论数量对比</h4>
+                        <div class="chart-content">
+                            <canvas id="platformCommentCountChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- 各平台好评词云图 -->
+                    <div class="chart-box">
+                        <h4>各平台好评词云图</h4>
+                        <div class="chart-content">
+                            <div id="platformGoodWordCloud"></div>
+                        </div>
+                    </div>
+                    <!-- 各平台差评词云图 -->
+                    <div class="chart-box">
+                        <h4>各平台差评词云图</h4>
+                        <div class="chart-content">
+                            <div id="platformBadWordCloud"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 平台改进建议 -->
+                <div class="optimization-section">
+                    <h3><i class="fas fa-lightbulb"></i> 平台改进建议</h3>
+                    <div id="platformSuggestions" class="suggestions-container"></div>
+                </div>
+            </div>
+
+            <!-- 竞品分析结果 -->
+            <div id="competitiveResults" class="hidden">
+                <h3>竞品分析结果</h3>
+                <!-- 指标网格 -->
+                <div class="metrics-grid" id="competitiveMetricsContainer"></div>
+                <!-- 词云图容器 -->
+                <div id="competitiveWordCloudsContainer" class="wordclouds-container"></div>
+                <!-- 商品改进建议 -->
+                <div class="optimization-section">
+                    <h3><i class="fas fa-lightbulb"></i> 商品改进建议</h3>
+                    <div id="competitiveSuggestions" class="suggestions-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ECharts 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <!-- ECharts 词云插件 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
+    <!-- 多平台竞品分析页面JavaScript -->
+    <script src="../../static/js/analysis/competing.js"></script>
+{% endblock %}

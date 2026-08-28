@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %}数据总览 - 电商商品评论分析系统{% endblock %}
+{% block extra_css %}
+    <!-- 数据总览页面样式 -->
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+{% endblock %}
+{% block header_title %}<h2>数据总览</h2>{% endblock %}
+{% block header_subtitle %}<p>欢迎进入电商商品评论分析系统</p>{% endblock %}
+{% block content %}
+    <!-- 数据统计卡片区域 -->
+    <div class="cards-container">
+        <!-- 总数据集数量卡片 -->
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="card-content">
+                <h3>总数据集数量</h3>
+                <p class="amount">{{ total_datasets }}</p>
+            </div>
+        </div>
+
+        <!-- 已情感分析的数据集卡片 -->
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="card-content">
+                <h3>已情感分析的数据集</h3>
+                <p class="amount">{{ sentiment_datasets }}</p>
+            </div>
+        </div>
+
+        <!-- 商品数量卡片 -->
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="card-content">
+                <h3>商品数量</h3>
+                <p class="amount">{{ unique_products }}</p>
+            </div>
+        </div>
+
+        <!-- 总评论数量卡片 -->
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="card-content">
+                <h3>总评论数量</h3>
+                <p class="amount">{{ total_comments }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 商品筛选器 -->
+    <div class="filter-container">
+        <label class="filter-label">商品筛选：</label>
+        <select id="product-filter">
+            <option value="all">全部商品</option>
+            {% for product in products %}
+                <option value="{{ product }}">{{ product }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 图表展示区域 -->
+    <div class="charts-row">
+        <!-- 近12个月评论评分情况图表 -->
+        <div class="chart-container">
+            <h3 class="chart-title">近12个月评论评分情况</h3>
+            <canvas id="monthlySentimentChart"></canvas>
+        </div>
+
+        <!-- 近12个月评论评分波动图表 -->
+        <div class="chart-container">
+            <h3 class="chart-title">近12个月评论评分波动</h3>
+            <canvas id="scoreDistributionChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 情感分析和评论展示区域 -->
+    <div class="charts-row">
+        <!-- 评论评分分布图表 -->
+        <div class="chart-container">
+            <h3 class="chart-title">评论评分分布</h3>
+            <canvas id="sentimentOverviewChart"></canvas>
+        </div>
+
+        <!-- 随机评论展示区域 -->
+        <div class="comments-container">
+            <h3 class="chart-title">随机评论展示</h3>
+            <div class="comments-list" id="comments-list">
+                {% for comment in random_comments %}
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-nickname">{{ comment.nickname }}</span>
+                        <span class="comment-score">评分: {{ comment.score }}</span>
+                    </div>
+                    <div class="comment-content">{{ comment.content }}</div>
+                    <div class="comment-time">{{ comment.publishtime|date:"Y-m-d H:i" }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // 图表数据变量
+        const month_labels = {{ month_labels|safe }}; // 月份标签
+        const positive_data = {{ positive_data|safe }}; // 正面情感数据
+        const neutral_data = {{ neutral_data|safe }}; // 中性情感数据
+        const negative_data = {{ negative_data|safe }}; // 负面情感数据
+        const score_labels = {{ score_labels|safe }}; // 评分标签
+        const score_data = {{ score_data|safe }}; // 评分数据
+    </script>
+    <!-- 数据总览页面JavaScript -->
+    <script src="../static/js/dashboard.js"></script>
+{% endblock %}

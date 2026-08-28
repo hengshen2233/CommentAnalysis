@@ -1,0 +1,271 @@
+/* 数据卡片容器 */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+/* 数据卡片样式 */
+.card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease;
+}
+
+/* 卡片悬停效果 */
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* 卡片图标 */
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+    background-color: #4f46e5;
+}
+
+/* 卡片内容 */
+.card-content h3 {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.card-content .amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* 筛选器容器 */
+.filter-container {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* 筛选器标签 */
+.filter-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* 筛选器选择框 */
+.filter-container select {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* 图表容器 */
+.chart-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 图表标题 */
+.chart-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* 响应式设计 - 内容行 */
+@media (max-width: 1200px) {
+    .content-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 响应式设计 - 数据卡片 */
+@media (max-width: 992px) {
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 图表行布局 */
+.charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* 图表样式优化 */
+canvas {
+    max-width: 100%;
+    height: 400px !important;
+}
+
+/* 评论展示容器 */
+.comments-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.comments-container .chart-title {
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+
+/* 评论列表 */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* 评论项 */
+.comment-item {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-bottom: 2px solid #2575fc;
+}
+
+/* 评论头部 */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+/* 评论用户昵称 */
+.comment-nickname {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 评论评分 */
+.comment-score {
+    color: #666;
+}
+
+/* 评论内容 */
+.comment-content {
+    margin-bottom: 10px;
+    line-height: 1.4;
+    color: #333;
+}
+
+/* 评论时间 */
+.comment-time {
+    font-size: 0.8rem;
+    color: #999;
+    text-align: right;
+}
+
+/* 无评论提示 */
+.no-comments {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* 响应式设计 - 图表行 */
+@media (max-width: 768px) {
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 深色主题适配 */
+[data-theme="dark"] .card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .card-content h3 {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .card-content .amount {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-container {
+    background-color: var(--primary-bg);
+}
+
+[data-theme="dark"] .filter-container select {
+    background-color: var(--hover-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .chart-container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .chart-title {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .comments-container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .comment-item {
+    background-color: var(--hover-bg);
+    border-bottom-color: #2575fc;
+}
+
+[data-theme="dark"] .comment-nickname {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .comment-score {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .comment-content {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .comment-time {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .no-comments {
+    color: var(--text-secondary);
+}

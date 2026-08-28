@@ -1,0 +1,925 @@
+/* 页面容器 */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 搜索区域 */
+.search-section {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef2f7;
+}
+
+/* 搜索栏 */
+.search-bar-large {
+    display: flex;
+    align-items: center;
+    background-color: #f8fafc;
+    border-radius: 10px;
+    padding: 6px 16px;
+    margin-bottom: 15px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+/* 搜索栏悬停效果 */
+.search-bar-large:hover {
+    border-color: #cbd5e1;
+}
+
+/* 搜索栏聚焦效果 */
+.search-bar-large:focus-within {
+    border-color: #2575fc;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* 搜索图标 */
+.search-bar-large i.fa-search {
+    color: rgb(182, 182, 182);
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+/* 搜索输入框 */
+.search-bar-large input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    padding: 12px 0;
+    color: #334155;
+    outline: none;
+}
+
+/* 搜索输入框占位符 */
+.search-bar-large input::placeholder {
+    color: #94a3b8;
+}
+
+/* 搜索按钮 */
+.search-btn {
+    background-color: #2575fc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 搜索按钮悬停效果 */
+.search-btn:hover {
+    background-color: #0060ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+/* 搜索按钮点击效果 */
+.search-btn:active {
+    transform: translateY(0);
+}
+
+/* 筛选和排序区域 */
+.filter-sort-area {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+/* 筛选组和排序组 */
+.filter-group, .sort-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+}
+
+/* 筛选和排序标签 */
+.filter-group label, .sort-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    min-width: 65px;
+}
+
+/* 筛选和排序选择框 */
+.filter-group select, .sort-group select {
+    padding: 8px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: white;
+    color: #334155;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 130px;
+    flex: 1;
+    max-width: 180px;
+}
+
+/* 选择框聚焦效果 */
+.filter-group select:focus, .sort-group select:focus {
+    border-color: #2575fc;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* 筛选组布局 */
+.filter-group {
+    position: relative;
+    padding-right: 90px;
+}
+
+/* 重置按钮 */
+#resetBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 36px;
+    background-color: #64748b;
+    color: white;
+    white-space: nowrap;
+}
+
+/* 重置按钮悬停效果 */
+#resetBtn:hover {
+    background-color: #475569;
+}
+
+/* 排序组布局 */
+.sort-group {
+    position: relative;
+    padding-right: 110px;
+}
+
+/* 导出按钮 */
+#exportAllBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 36px;
+    background-color: #10b981;
+    color: white;
+    white-space: nowrap;
+}
+
+/* 导出按钮悬停效果 */
+#exportAllBtn:hover {
+    background-color: #059669;
+}
+
+/* 禁用状态的筛选框样式 */
+select:disabled {
+    background-color: #f3f4f6 !important;
+    color: #9ca3af !important;
+    cursor: not-allowed !important;
+    border-color: #d1d5db !important;
+}
+
+/* 禁用状态的筛选框悬停效果 */
+select:disabled:hover {
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+}
+
+/* 结果区域 */
+.results-section {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef2f7;
+    min-height: 300px;
+}
+
+/* 结果区域头部 */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.section-header h3 {
+    font-size: 1.2rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* 结果数量 */
+.result-count {
+    color: #64748b;
+    font-size: 0.9rem;
+    background-color: #f1f5f9;
+    padding: 5px 10px;
+    border-radius: 16px;
+}
+
+/* 评论列表 */
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+    max-height: 700px;
+    overflow-y: auto;
+    padding-right: 5px;
+    min-height: 200px;
+}
+
+/* 滚动条样式 */
+.comment-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.comment-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.comment-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.comment-list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* 评论项 */
+.comment-item {
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+/* 评论项悬停效果 */
+.comment-item:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+/* 评论头部 */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 8px;
+}
+
+/* 左侧信息区域 */
+.comment-header-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    flex: 1;
+}
+
+/* 右侧信息区域 */
+.comment-header-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* 用户信息 */
+.comment-user-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.comment-user-info i {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+/* 平台信息 */
+.comment-datasource-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #0369a1;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.comment-datasource-tag i {
+    font-size: 0.8rem;
+    color: #0369a1;
+}
+
+/* 商品和数据集信息 */
+.comment-product-info,
+.comment-dataset-info {
+    font-size: 0.8rem;
+    color: #475569;
+}
+
+.comment-product-info .product-name,
+.comment-dataset-info .dataset-name {
+    color: #059669;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+/* 发布时间 */
+.comment-date {
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+/* 评分 */
+.comment-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #f59e0b;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.comment-score i {
+    color: #f59e0b;
+    font-size: 0.8rem;
+}
+
+/* 情感分类 */
+.comment-sentiment {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* 积极情感 */
+.comment-sentiment.positive {
+    color: #166534;
+}
+
+/* 中性情感 */
+.comment-sentiment.neutral {
+    color: #92400e;
+}
+
+/* 消极情感 */
+.comment-sentiment.negative {
+    color: #991b1b;
+}
+
+/* 无情感分析 */
+.comment-sentiment.sentiment-none {
+    color: #475569;
+}
+
+.comment-sentiment i {
+    font-size: 0.8rem;
+}
+
+/* 评论内容 */
+.comment-content {
+    color: #334155;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    padding: 8px 0;
+}
+
+/* 高亮文本 */
+.highlight {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 0 2px;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* 滚动加载相关样式 */
+.load-more-section {
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 15px;
+    border-top: 1px solid #eef2f7;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 加载提示文字 */
+.load-more-text {
+    color: #64748b;
+    font-size: 0.9rem;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 已加载所有评论 */
+.no-more-results {
+    color: #64748b;
+    font-size: 0.9rem;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.no-more-results i {
+    margin-right: 6px;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* 初始加载提示 */
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 15px;
+    color: #64748b;
+    font-size: 0.9rem;
+    background-color: transparent;
+    border: none;
+    min-height: 50px;
+}
+
+.loading-spinner i {
+    font-size: 1rem;
+    animation: spin 1s linear infinite;
+}
+
+/* 加载更多评论提示 */
+#loadMoreSpinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+    color: #64748b;
+    background-color: transparent;
+    border: none;
+    font-size: 0.9rem;
+}
+
+#loadMoreSpinner i {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* 旋转动画 */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 无结果提示 */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background-color: transparent;
+    border: none;
+}
+
+.no-results i {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: #94a3b8;
+}
+
+.no-results p {
+    margin: 4px 0;
+}
+
+/* 结果内容容器 */
+.results-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+}
+
+/* 响应式设计 - 平板屏幕 */
+@media (max-width: 992px) {
+    .filter-group, .sort-group {
+        gap: 6px;
+    }
+
+    .filter-group select, .sort-group select {
+        min-width: 110px;
+        flex: 0 1 calc(50% - 8px);
+    }
+
+    /* 调整按钮在平板上的位置 */
+    .filter-group, .sort-group {
+        padding-right: 0;
+        position: relative;
+    }
+
+    #resetBtn, #exportAllBtn {
+        position: static;
+        margin-top: 8px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* 调整评论头部在平板上的显示 */
+    .comment-header-left,
+    .comment-header-right {
+        gap: 8px;
+    }
+
+    .comment-header {
+        gap: 6px;
+    }
+}
+
+/* 响应式设计 - 移动屏幕 */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 0 10px;
+    }
+
+    .search-section,
+    .results-section {
+        padding: 15px;
+    }
+
+    /* 搜索栏垂直布局 */
+    .search-bar-large {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .search-bar-large input {
+        padding: 10px;
+        border-bottom: 1px solid #e2e8f0;
+        margin-bottom: 8px;
+    }
+
+    /* 筛选和排序垂直布局 */
+    .filter-group, .sort-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .filter-group label, .sort-group label {
+        margin-bottom: 0;
+        min-width: auto;
+    }
+
+    .filter-group select, .sort-group select {
+        width: 100%;
+        max-width: 100%;
+        flex: none;
+    }
+
+    /* 移动端按钮布局 */
+    #resetBtn, #exportAllBtn {
+        width: 100%;
+        margin-top: 8px;
+        justify-content: center;
+    }
+
+    /* 结果区域头部垂直布局 */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    /* 移动端评论头部垂直布局 */
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding-bottom: 8px;
+    }
+
+    .comment-header-left,
+    .comment-header-right {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    /* 左侧信息在两行显示 */
+    .comment-header-left {
+        flex-wrap: wrap;
+    }
+
+    .comment-user-info,
+    .comment-datasource-tag {
+        flex: 0 0 auto;
+    }
+
+    .comment-product-info,
+    .comment-dataset-info {
+        flex: 1 0 100%;
+        margin-top: 4px;
+    }
+
+    /* 右侧信息在一行显示 */
+    .comment-header-right {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .comment-content {
+        padding: 6px 0;
+        font-size: 0.85rem;
+    }
+
+    /* 移动端调整评论列表高度 */
+    .comment-list {
+        max-height: 600px;
+    }
+
+    .load-more-section {
+        min-height: 45px;
+        padding: 12px 0;
+    }
+
+    .loading-spinner {
+        min-height: 45px;
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+
+    .no-results {
+        min-height: 150px;
+        padding: 30px 15px;
+    }
+
+    .load-more-text,
+    .no-more-results,
+    #loadMoreSpinner {
+        font-size: 0.85rem;
+    }
+}
+
+/* 响应式设计 - 超小屏幕 */
+@media (max-width: 480px) {
+    .search-section,
+    .results-section {
+        padding: 12px;
+    }
+
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* 超小屏幕进一步调整字体大小 */
+    .comment-user-info,
+    .comment-datasource-tag,
+    .comment-product-info,
+    .comment-dataset-info,
+    .comment-date,
+    .comment-score,
+    .comment-sentiment {
+        font-size: 0.75rem;
+    }
+
+    .comment-header-left,
+    .comment-header-right {
+        gap: 6px;
+    }
+
+    /* 在超小屏幕上，右侧信息换行显示 */
+    .comment-header-right {
+        flex-wrap: wrap;
+    }
+
+    .comment-date,
+    .comment-score,
+    .comment-sentiment {
+        flex: 0 0 calc(33.33% - 4px);
+        text-align: center;
+    }
+
+    /* 超小屏幕调整评论列表高度 */
+    .comment-list {
+        max-height: 500px;
+    }
+
+    .load-more-section {
+        min-height: 40px;
+        padding: 10px 0;
+    }
+
+    .loading-spinner {
+        min-height: 40px;
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+
+    .load-more-text,
+    .no-more-results,
+    #loadMoreSpinner {
+        font-size: 0.8rem;
+    }
+}
+
+/* 暗色主题适配 */
+[data-theme="dark"] .search-section,
+[data-theme="dark"] .results-section {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 搜索栏适配 */
+[data-theme="dark"] .search-bar-large {
+    background-color: var(--hover-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .search-bar-large input {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .search-bar-large input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* 筛选与排序区域 */
+[data-theme="dark"] .filter-sort-area {
+    background-color: var(--hover-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .filter-group label,
+[data-theme="dark"] .sort-group label {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-group select,
+[data-theme="dark"] .sort-group select {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-group select:focus,
+[data-theme="dark"] .sort-group select:focus {
+    border-color: #2575fc;
+}
+
+/* 禁用状态适配 */
+[data-theme="dark"] select:disabled {
+    background-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* 结果列表头部 */
+[data-theme="dark"] .section-header {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .section-header h3 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .result-count {
+    background-color: var(--hover-bg);
+    color: var(--text-secondary);
+}
+
+/* 评论项适配 */
+[data-theme="dark"] .comment-item {
+    background-color: var(--hover-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .comment-item:hover {
+    border-color: #2575fc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .comment-header {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .comment-user-info,
+[data-theme="dark"] .comment-product-info,
+[data-theme="dark"] .comment-dataset-info {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .comment-content {
+    color: var(--text-primary);
+}
+
+/* 情感标签与高亮 */
+[data-theme="dark"] .comment-sentiment.sentiment-none {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .comment-datasource-tag,
+[data-theme="dark"] .comment-datasource-tag i {
+    color: #4ac1f7;
+}
+
+[data-theme="dark"] .comment-product-info .product-name,
+[data-theme="dark"] .comment-dataset-info .dataset-name {
+    color: rgba(11, 245, 23, 0.78);
+}
+
+[data-theme="dark"] .comment-score,
+[data-theme="dark"] .comment-score i {
+    color: #f59e0b;
+}
+
+[data-theme="dark"] .highlight {
+    background-color: #404040;
+    color: #ff9d5e;
+}
+
+/* 滚动条与加载状态 */
+[data-theme="dark"] .comment-list::-webkit-scrollbar-track {
+    background: var(--card-bg);
+}
+
+[data-theme="dark"] .comment-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+}
+
+[data-theme="dark"] .load-more-section,
+[data-theme="dark"] .loading-spinner,
+[data-theme="dark"] .no-results {
+    color: var(--text-secondary);
+}

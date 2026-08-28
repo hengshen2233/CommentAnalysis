@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}情感分析 - 电商商品评论分析系统{% endblock %}
+{% block extra_css %}
+    <!-- 情感分析页面样式 -->
+    <link rel="stylesheet" href="../../static/css/analysis/emotion.css">
+{% endblock %}
+{% block header_title %}<h2>情感分析</h2>{% endblock %}
+{% block header_subtitle %}<p>对数据集进行情感分析</p>{% endblock %}
+{% block content %}
+    <div class="emotion-container">
+        <!-- 欢迎区域 -->
+        <div id="welcomeSection" class="welcome-section">
+            <div class="welcome-icon-box">
+                <i class="fas fa-smile"></i>
+            </div>
+            <h1>情感分析系统</h1>
+            <p class="description">
+                情感分析是对评论进行情感分类、计算情感程度和提取观点词的分析。<br>
+                我们将为您提供情感分布、趋势波动及核心观点云图，助您深度洞察用户心声。
+            </p>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar" id="mainToolbar">
+            <div class="select-wrapper">
+                <select id="datasetSelect">
+                    <option value="">--- 请选择数据集 ---</option>
+                    {% for ds in datasets %}
+                        <option value="{{ ds.dataset }}">{{ ds.dataset }}</option>
+                    {% endfor %}
+                </select>
+                <div id="customSelectOptions" class="custom-select-options"></div>
+            </div>
+            <!-- 开始分析按钮 -->
+            <button id="analyzeBtn" class="btn-primary">
+                <i class="fas fa-wand-magic-sparkles"></i> 开始分析
+            </button>
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>深度情感计算中，请稍候...</p>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="errorMessage" class="error-message hidden">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- 结果展示区域 -->
+        <div id="resultsArea" class="hidden">
+            <!-- 指标网格 -->
+            <div class="metrics-grid">
+                <!-- 总评论数 -->
+                <div class="metric-card">
+                    <h3>总评论数</h3>
+                    <p class="value" id="total_comments">--</p>
+                </div>
+                <!-- 好评率 -->
+                <div class="metric-card">
+                    <h3><i class="fas fa-thumbs-up"></i> 好评率</h3>
+                    <p class="value" id="goodRate">0%</p>
+                </div>
+                <!-- 最好评观点词 -->
+                <div class="metric-card">
+                    <h3><i class="fas fa-star"></i> 最好评观点词</h3>
+                    <p class="value sub" id="bestWord">--</p>
+                </div>
+                <!-- 最差评观点词 -->
+                <div class="metric-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> 最差评观点词</h3>
+                    <p class="value sub" id="worstWord">--</p>
+                </div>
+            </div>
+
+            <!-- 图表容器 -->
+            <div class="charts-container">
+                <!-- 情感分布饼图 -->
+                <div class="chart-box">
+                    <h4>情感分布饼图</h4>
+                    <div class="chart-content">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+                <!-- 情感波动折线图 -->
+                <div class="chart-box">
+                    <h4>情感波动折线图</h4>
+                    <div class="chart-content">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+                <!-- 高频观点词统计 -->
+                <div class="chart-box">
+                    <h4>高频观点词统计</h4>
+                    <div class="chart-content">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+                <!-- 观点词云图 -->
+                <div class="chart-box">
+                    <h4>观点词云图</h4>
+                    <div class="chart-content">
+                        <div id="wordCloud"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品优化建议 -->
+            <div class="optimization-section">
+                <h3><i class="fas fa-lightbulb"></i> 商品优化建议</h3>
+                <div id="optimizationSuggestions" class="suggestions-container">
+                    <p class="loading-text">生成优化建议中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ECharts 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <!-- ECharts 词云插件 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
+    <!-- 情感分析页面JavaScript -->
+    <script src="../../static/js/analysis/emotion.js"></script>
+{% endblock %}
