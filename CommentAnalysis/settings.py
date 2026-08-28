@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&$i@1i0%j60&#a+us_!hq!k#@*@2%a+g(&4p@5%y92!+w1a^)i"
+SECRET_KEY = "Django密钥"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,7 +83,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",  # mysql数据库
         "NAME": "comment_analysis",  # 数据库名称
         "USER": "root",  # 数据库用户名
-        "PASSWORD": "ma20040809",  # 数据库密码
+        "PASSWORD": "你的数据库密码",  # 数据库密码
         "HOST": "localhost",
         "PORT": 3306,
     }
